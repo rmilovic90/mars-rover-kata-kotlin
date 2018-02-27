@@ -16,9 +16,9 @@ object RoverSpec : Spek({
 			listOf("RR", "0:0:S"),
 			listOf("RRR", "0:0:W"),
 			listOf("RRRR", "0:0:N")
-		).forEach { test ->
-			it("should rotate right (comands: ${test[0]}, expected position: ${test[1]})") {
-				rover.execute(test[0]) shouldEqual test[1]
+		).forEach { testData ->
+			it("should rotate right (comands: ${testData[0]}, expected position: ${testData[1]})") {
+				rover.execute(testData[0]) shouldEqual testData[1]
 			}
 		}
 
@@ -27,9 +27,9 @@ object RoverSpec : Spek({
 			listOf("LL", "0:0:S"),
 			listOf("LLL", "0:0:E"),
 			listOf("LLLL", "0:0:N")
-		).forEach { test ->
-			it("should rotate left (comands: ${test[0]}, expected position: ${test[1]})") {
-				rover.execute(test[0]) shouldEqual test[1]
+		).forEach { testData ->
+			it("should rotate left (comands: ${testData[0]}, expected position: ${testData[1]})") {
+				rover.execute(testData[0]) shouldEqual testData[1]
 			}
 		}
 	}
@@ -40,24 +40,18 @@ class Rover {
 	private var eDirection = Direction.NORTH
 
 	fun execute(commands: String): String {
-		commands.forEach {
-			if (it == 'L') {
-				direction = rotateLeft()
+		commands.forEach { command ->
+			if (command == 'L') {
+				eDirection = eDirection.left()!!
+				direction = eDirection.value()
 			}
-			if (it == 'R') {
+			if (command == 'R') {
 				eDirection = eDirection.right()!!
 				direction = eDirection.value()
 			}
 		}
 
 		return "0:0:$direction"
-	}
-
-	private fun rotateLeft() = when (direction) {
-		"N" -> "W"
-		"W" -> "S"
-		"S" -> "E"
-		else -> "N"
 	}
 }
 
@@ -68,6 +62,10 @@ enum class Direction(private val value: String, private val left: String, privat
 	WEST("W", "S", "N");
 
 	fun value() = value
+
+	fun left() = values().firstOrNull { direction ->
+		direction.value == this.left
+	}
 
 	fun right() = values().firstOrNull { direction ->
 		direction.value == this.right
