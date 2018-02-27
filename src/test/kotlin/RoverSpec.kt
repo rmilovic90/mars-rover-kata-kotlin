@@ -5,13 +5,18 @@ import org.jetbrains.spek.api.dsl.it
 
 object RoverSpec : Spek({
 	describe("a rover") {
-		it("should rotate right") {
-			val rover = Rover()
-			rover.execute() shouldEqual "0:0:E"
+		val rover = Rover()
+
+		listOf(
+			listOf("R", "0:0:E")
+		).forEach { test ->
+			it("should rotate right (comands: ${test[0]}, expected position: ${test[1]})") {
+				rover.execute(test[0]) shouldEqual test[1]
+			}
 		}
 	}
 })
 
 class Rover {
-	fun execute() = "0:0:E"
+	fun execute(commands: String) = "0:0:E"
 }
