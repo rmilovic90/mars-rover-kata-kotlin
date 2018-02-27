@@ -36,22 +36,19 @@ object RoverSpec : Spek({
 })
 
 class Rover {
-	private var direction = "N"
-	private var eDirection = Direction.NORTH
+	private var direction = Direction.NORTH
 
 	fun execute(commands: String): String {
 		commands.forEach { command ->
 			if (command == 'L') {
-				eDirection = eDirection.left()!!
-				direction = eDirection.value()
+				direction = direction.left()!!
 			}
 			if (command == 'R') {
-				eDirection = eDirection.right()!!
-				direction = eDirection.value()
+				direction = direction.right()!!
 			}
 		}
 
-		return "0:0:$direction"
+		return "0:0:${direction.value()}"
 	}
 }
 
